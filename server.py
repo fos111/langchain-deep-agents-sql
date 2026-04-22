@@ -100,9 +100,24 @@ async def root():
     return {"status": "ok", "message": "Text-to-SQL Agent API"}
 
 
-@app.get("/openapi.json")
-async def openapi():
-    return app.openapi()
+@app.post("/assistants/search")
+async def search_assistants():
+    return [{"assistant_id": "agent", "graph_id": "agent", "config": {}}]
+
+
+@app.get("/assistants/search")
+async def search_assistants_get():
+    return [{"assistant_id": "agent", "graph_id": "agent", "config": {}}]
+
+
+@app.get("/assistants/info")
+async def assistants_info():
+    return {"assistants": [{"assistant_id": "agent", "graph_id": "agent"}]}
+
+
+@app.get("/assistant/info")
+async def assistant_info():
+    return {"assistant_id": "agent", "graph_id": "agent"}
 
 
 if __name__ == "__main__":
