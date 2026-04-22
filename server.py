@@ -2,7 +2,7 @@ import os
 import asyncio
 from dotenv import load_dotenv
 from fastapi import FastAPI, Header, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel
 import uvicorn
 
@@ -17,9 +17,27 @@ class RunRequest(BaseModel):
     stream_mode: str = "updates"
 
 
-@app.post("/runs/stream")
+class AssistantConfig(BaseModel):
+    assistant_id: str
+    config: dict = {}
+
+
+# LangSmith Studio expects these endpoints
+@app.get("/assistants")
+async def list_assistants():
+    return [{"assistant_id": "agent", "graph_id": "agent", "config": {}}]
+
+
+@app.get("/assistants/{assistant_id}")
+async def get_assistant(assistant_id: str):
+    return {"assistant_id": assistant_id, "graph_id": "agent", "config": {}}
+
+
+@app.post("/assistants/{assistant_id}/runs/stream")
 async def stream_run(
-    request: RunRequest, x_api_key: str = Header(None, alias="X-Api-Key")
+    assistant_id: str,
+    request: RunRequest,
+    x_api_key: str = Header(None, alias="X-Api-Key"),
 ):
     try:
         from agent import create_sql_deep_agent
@@ -47,14 +65,21 @@ async def stream_run(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.post("/runs/stream")
+async def stream_run_root(
+    request: RunRequest, x_api_key: str = Header(None, alias="X-Api-Key")
+):
+    return await stream_run("agent", request, x_api_key)
+
+
 @app.get("/health")
 async def health():
     return {"status": "ok"}
 
 
-@app.get("/assistants/{assistant_id}")
-async def get_assistant(assistant_id: str):
-    return {"assistant_id": assistant_id, "graph_id": "agent"}
+@app.get("/info")
+async def info():
+    return {"version": "0.1.0", "name": "text2sql-agent", "runtime": "in-memory"}
 
 
 if __name__ == "__main__":
