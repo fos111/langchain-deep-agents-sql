@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 8024
 
-CMD ["langgraph", "up", "--port", "8024"]
+CMD ["python", "server.py"]

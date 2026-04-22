@@ -2,8 +2,8 @@ services:
   - type: web
     name: text2sql-agent
     env: python
-    buildCommand: uv pip install -e .
-    startCommand: uvicorn langgraph_api.server:app --host 0.0.0.0 --port 8024
+    buildCommand: uv pip install --system -e .
+    startCommand: python server.py
     envVars:
       - key: LANGSMITH_API_KEY
         sync: false
