@@ -71,7 +71,8 @@ async def stream_run(
         )
 
         async def event_generator():
-            yield f"data: {json.dumps({'messages': [{'role': 'assistant', 'content': answer}]})}\n\n"
+            yield f"data: {json.dumps([{'role': 'assistant', 'content': answer}])}\n\n"
+            yield "data: [DONE]\n\n"
 
         return StreamingResponse(event_generator(), media_type="text/event-stream")
 
@@ -223,6 +224,7 @@ async def stream_thread_run(
 
         async def event_generator():
             yield f"data: {json.dumps({'messages': [{'role': 'assistant', 'content': answer}]})}\n\n"
+            yield "data: [DONE]\n\n"
 
         return StreamingResponse(event_generator(), media_type="text/event-stream")
 
