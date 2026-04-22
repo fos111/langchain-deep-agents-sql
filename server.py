@@ -3,12 +3,21 @@ import asyncio
 from dotenv import load_dotenv
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import StreamingResponse, JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 
 load_dotenv()
 
 app = FastAPI(title="Text-to-SQL Agent API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class RunRequest(BaseModel):
@@ -22,7 +31,6 @@ class AssistantConfig(BaseModel):
     config: dict = {}
 
 
-# LangSmith Studio expects these endpoints
 @app.get("/assistants")
 async def list_assistants():
     return [{"assistant_id": "agent", "graph_id": "agent", "config": {}}]
@@ -80,6 +88,16 @@ async def health():
 @app.get("/info")
 async def info():
     return {"version": "0.1.0", "name": "text2sql-agent", "runtime": "in-memory"}
+
+
+@app.get("/")
+async def root():
+    return {"status": "ok", "message": "Text-to-SQL Agent API"}
+
+
+@app.get("/openapi.json")
+async def openapi():
+    return app.openapi()
 
 
 if __name__ == "__main__":
