@@ -17,6 +17,9 @@ dependencies = [
     "langchain-openrouter>=0.2.1",
     "langchain-cerebras>=0.8.2",
     "langgraph-cli[inmem]>=0.4.23",
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.23.0",
+    "pydantic>=2.0.0",
 ]
 
 [project.urls]
