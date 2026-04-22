@@ -16,6 +16,7 @@ dependencies = [
     "rich>=13.0.0",
     "langchain-openrouter>=0.2.1",
     "langchain-cerebras>=0.8.2",
+    "langchain-nvidia-ai-endpoints>=0.2.0",
     "langgraph-cli[inmem]>=0.4.23",
     "fastapi>=0.100.0",
     "uvicorn[standard]>=0.23.0",
