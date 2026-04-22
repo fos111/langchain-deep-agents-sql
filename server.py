@@ -53,6 +53,7 @@ async def stream_run(
     x_api_key: str = Header(None, alias="X-Api-Key"),
 ):
     try:
+        import json
         from agent import create_sql_deep_agent
 
         agent = create_sql_deep_agent()
@@ -70,7 +71,15 @@ async def stream_run(
         )
 
         async def event_generator():
-            yield f"data: {answer}\n\n"
+            data = json.dumps(
+                {
+                    "event": "updates",
+                    "data": {"messages": [{"role": "assistant", "content": answer}]},
+                }
+            )
+            yield f"event: data\ndata: {data}\n\n"
+            end_data = json.dumps({"event": "end"})
+            yield f"event: end\ndata: {end_data}\n\n"
 
         return StreamingResponse(event_generator(), media_type="text/event-stream")
 
