@@ -1,0 +1,22 @@
+{
+  "name": "Text-to-SQL Benchmark",
+  "version": "1.0",
+  "queries": [
+    {
+      "question": "How many customers are from Canada?",
+      "expected_keywords": ["count", "canada"]
+    },
+    {
+      "question": "What are the top 5 best-selling artists?"
+    },
+    {
+      "question": "Which employee generated the most revenue?"
+    },
+    {
+      "question": "List all albums by artists from the USA"
+    },
+    {
+      "question": "How many invoices were created in 2023?"
+    }
+  ]
+}
