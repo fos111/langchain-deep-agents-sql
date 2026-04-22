@@ -190,5 +190,50 @@ async def get_thread_history(thread_id: str):
     return {"messages": []}
 
 
+@app.get("/threads/{thread_id}/runs")
+async def list_thread_runs(
+    thread_id: str, limit: int = 1000, offset: int = 0, status: str = None
+):
+    return {"runs": [], "has_more": False}
+
+
+@app.post("/threads/{thread_id}/runs/stream")
+async def stream_thread_run(
+    thread_id: str,
+    request: RunRequest,
+    x_api_key: str = Header(None, alias="X-Api-Key"),
+):
+    try:
+        import json
+        from agent import create_sql_deep_agent
+
+        agent = create_sql_deep_agent()
+
+        messages = request.input.get("messages", [])
+        user_message = messages[-1]["content"] if messages else ""
+
+        result = agent.invoke({"messages": [{"role": "user", "content": user_message}]})
+
+        final_message = result["messages"][-1]
+        answer = (
+            final_message.content
+            if hasattr(final_message, "content")
+            else str(final_message)
+        )
+
+        async def event_generator():
+            yield f"data: {json.dumps({'messages': [{'role': 'assistant', 'content': answer}]})}\n\n"
+
+        return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/threads/{thread_id}/history")
+async def update_thread_history(thread_id: str):
+    return {"updated": True}
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8024)
