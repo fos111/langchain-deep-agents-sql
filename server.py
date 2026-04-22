@@ -36,6 +36,11 @@ async def list_assistants():
     return [{"assistant_id": "agent", "graph_id": "agent", "config": {}}]
 
 
+@app.post("/assistants")
+async def create_assistant(assistant_id: str = "agent", config: dict = {}):
+    return {"assistant_id": assistant_id, "graph_id": "agent", "config": config}
+
+
 @app.get("/assistants/{assistant_id}")
 async def get_assistant(assistant_id: str):
     return {"assistant_id": assistant_id, "graph_id": "agent", "config": {}}
