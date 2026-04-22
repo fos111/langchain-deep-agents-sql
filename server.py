@@ -155,5 +155,33 @@ async def list_objects(namespace: str):
     return {"objects": [], "has_more": False}
 
 
+@app.post("/threads")
+async def create_thread():
+    import uuid
+
+    thread_id = str(uuid.uuid4())
+    return {"thread_id": thread_id, "created_at": "", "metadata": {}}
+
+
+@app.get("/threads")
+async def list_threads():
+    return {"threads": [], "has_more": False}
+
+
+@app.get("/threads/{thread_id}")
+async def get_thread(thread_id: str):
+    return {"thread_id": thread_id, "created_at": "", "metadata": {}}
+
+
+@app.delete("/threads/{thread_id}")
+async def delete_thread(thread_id: str):
+    return {"deleted": True}
+
+
+@app.get("/threads/{thread_id}/history")
+async def get_thread_history(thread_id: str):
+    return {"messages": []}
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8024)
