@@ -33,7 +33,52 @@ class AssistantConfig(BaseModel):
 
 @app.get("/assistants")
 async def list_assistants():
-    return ["agent"]
+    return [{"assistant_id": "agent", "graph_id": "agent", "config": {}}]
+
+
+@app.post("/assistants")
+async def create_assistant():
+    return {"assistant_id": "agent", "graph_id": "agent"}
+
+
+@app.get("/assistants/search")
+async def search_assistants():
+    return [{"assistant_id": "agent", "graph_id": "agent", "config": {}}]
+
+
+@app.post("/assistants/search")
+async def search_assistants_post():
+    return [{"assistant_id": "agent", "graph_id": "agent", "config": {}}]
+
+
+@app.get("/assistants/info")
+async def assistants_info():
+    return {"assistants": [{"assistant_id": "agent", "graph_id": "agent"}]}
+
+
+@app.get("/assistant/info")
+async def assistant_info():
+    return {"assistant_id": "agent", "graph_id": "agent"}
+
+
+@app.get("/threads")
+async def list_threads():
+    return []
+
+
+@app.post("/assistants")
+async def create_assistant():
+    return {"assistant_id": "agent", "graph_id": "agent"}
+
+
+@app.get("/assistants/search")
+async def search_assistants():
+    return [{"assistant_id": "agent", "graph_id": "agent", "config": {}}]
+
+
+@app.post("/assistants/search")
+async def search_assistants_post():
+    return [{"assistant_id": "agent", "graph_id": "agent", "config": {}}]
 
 
 @app.post("/assistants")
@@ -183,7 +228,7 @@ async def create_namespace():
 
 @app.get("/store/namespaces")
 async def list_namespaces():
-    return {"namespaces": [{"name": "default"}]}
+    return [{"name": "default"}]
 
 
 @app.get("/store/namespaces/{namespace}/objects")
