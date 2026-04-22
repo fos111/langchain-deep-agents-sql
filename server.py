@@ -33,12 +33,37 @@ class AssistantConfig(BaseModel):
 
 @app.get("/assistants")
 async def list_assistants():
-    return [{"assistant_id": "agent", "graph_id": "agent", "config": {}}]
+    return ["agent"]
 
 
 @app.post("/assistants")
-async def create_assistant(assistant_id: str = "agent", config: dict = {}):
-    return {"assistant_id": assistant_id, "graph_id": "agent", "config": config}
+async def create_assistant():
+    return {"assistant_id": "agent", "graph_id": "agent"}
+
+
+@app.get("/assistants/search")
+async def search_assistants():
+    return ["agent"]
+
+
+@app.post("/assistants/search")
+async def search_assistants_post():
+    return ["agent"]
+
+
+@app.post("/assistants")
+async def create_assistant():
+    return {"assistant_id": "agent", "graph_id": "agent"}
+
+
+@app.get("/assistants/search")
+async def search_assistants():
+    return []
+
+
+@app.post("/assistants/search")
+async def search_assistants_post():
+    return []
 
 
 @app.get("/assistants/{assistant_id}")
@@ -176,7 +201,7 @@ async def create_thread():
 
 @app.get("/threads")
 async def list_threads():
-    return {"threads": [], "has_more": False}
+    return []
 
 
 @app.get("/threads/{thread_id}")
@@ -191,7 +216,7 @@ async def delete_thread(thread_id: str):
 
 @app.get("/threads/{thread_id}/history")
 async def get_thread_history(thread_id: str):
-    return {"messages": []}
+    return []
 
 
 @app.get("/threads/{thread_id}/runs")
