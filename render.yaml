@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: text2sql-agent
+    env: python
+    buildCommand: uv pip install -e .
+    startCommand: uvicorn langgraph_api.server:app --host 0.0.0.0 --port 8024
+    envVars:
+      - key: LANGSMITH_API_KEY
+        sync: false
+      - key: NVIDIA_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: LANGCHAIN_TRACING_V2
+        value: "true"
+      - key: LANGSMITH_ENDPOINT
+        value: "https://api.smith.langchain.com"
+      - key: LANGSMITH_PROJECT
+        value: "text2sql-deepagent"
