@@ -71,8 +71,11 @@ async def stream_run(
         )
 
         async def event_generator():
-            yield f"data: {json.dumps([{'role': 'assistant', 'content': answer}])}\n\n"
-            yield "data: [DONE]\n\n"
+            run_id = "run_" + str(hash(user_message))[:8]
+            yield f"event: run_created\ndata: {json.dumps({{'run_id': run_id}})}\n\n"
+            yield f"event: metadata\ndata: {json.dumps({{'run_id': run_id, 'assistant_id': assistant_id}})}\n\n"
+            yield f"data: {json.dumps({{'messages': [{{'role': 'assistant', 'content': answer}}]}})}\n\n"
+            yield f"event: done\ndata: {json.dumps({{'run_id': run_id}})}\n\n"
 
         return StreamingResponse(event_generator(), media_type="text/event-stream")
 
@@ -223,8 +226,11 @@ async def stream_thread_run(
         )
 
         async def event_generator():
-            yield f"data: {json.dumps({'messages': [{'role': 'assistant', 'content': answer}]})}\n\n"
-            yield "data: [DONE]\n\n"
+            run_id = "run_" + str(hash(user_message))[:8]
+            yield f"event: run_created\ndata: {json.dumps({{'run_id': run_id}})}\n\n"
+            yield f"event: metadata\ndata: {json.dumps({{'run_id': run_id, 'assistant_id': 'agent'}})}\n\n"
+            yield f"data: {json.dumps({{'messages': [{{'role': 'assistant', 'content': answer}}]}})}\n\n"
+            yield f"event: done\ndata: {json.dumps({{'run_id': run_id}})}\n\n"
 
         return StreamingResponse(event_generator(), media_type="text/event-stream")
 
