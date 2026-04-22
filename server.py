@@ -120,5 +120,40 @@ async def assistant_info():
     return {"assistant_id": "agent", "graph_id": "agent"}
 
 
+@app.get("/assistants/{assistant_id}/schemas")
+async def get_assistant_schema(assistant_id: str):
+    return {"input_schema": {}, "config_schema": {}, "output_schema": {}}
+
+
+@app.get("/assistants/{assistant_id}/subgraphs")
+async def get_subgraphs(assistant_id: str, recurse: bool = False):
+    return {"subgraphs": {}}
+
+
+@app.get("/assistants/{assistant_id}/graph")
+async def get_graph(assistant_id: str, xray: bool = False):
+    return {"graph": {}, "version": "0.1.0"}
+
+
+@app.get("/assistants/{assistant_id}/versions")
+async def get_versions(assistant_id: str):
+    return {"version": "0.1.0", "agent": "text2sql-agent"}
+
+
+@app.post("/store/namespaces")
+async def create_namespace():
+    return {"namespace": "default"}
+
+
+@app.get("/store/namespaces")
+async def list_namespaces():
+    return {"namespaces": [{"name": "default"}]}
+
+
+@app.get("/store/namespaces/{namespace}/objects")
+async def list_objects(namespace: str):
+    return {"objects": [], "has_more": False}
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8024)
