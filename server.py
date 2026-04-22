@@ -71,15 +71,7 @@ async def stream_run(
         )
 
         async def event_generator():
-            data = json.dumps(
-                {
-                    "event": "updates",
-                    "data": {"messages": [{"role": "assistant", "content": answer}]},
-                }
-            )
-            yield f"event: data\ndata: {data}\n\n"
-            end_data = json.dumps({"event": "end"})
-            yield f"event: end\ndata: {end_data}\n\n"
+            yield f"data: {json.dumps({'messages': [{'role': 'assistant', 'content': answer}]})}\n\n"
 
         return StreamingResponse(event_generator(), media_type="text/event-stream")
 
@@ -141,7 +133,13 @@ async def get_subgraphs(assistant_id: str, recurse: bool = False):
 
 @app.get("/assistants/{assistant_id}/graph")
 async def get_graph(assistant_id: str, xray: bool = False):
-    return {"graph": {}, "version": "0.1.0"}
+    mermaid = """graph TD;
+        User([User])-->Agent;
+        Agent-->Tools;
+        Tools-->Agent;
+        Agent-->Output([Output]);
+    """
+    return {"draw": mermaid, "mermaid": mermaid, "version": "0.1.0"}
 
 
 @app.get("/assistants/{assistant_id}/versions")
